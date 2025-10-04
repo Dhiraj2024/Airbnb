@@ -1,0 +1,9 @@
+
+
+       <% if(successMsg.length > 0) { %>
+        <p  class="alert alert-success alert-dismissible fade show" role="alert" style="color: green">
+            <%= successMsg %> <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button> </p>
+    <% } %>
+    <% if(errorMsg.length > 0) { %>
+        <p style="color: red"><%= errorMsg %></p>
+    <% } %>
