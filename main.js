@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV != "production") {
 require("dotenv").config();
 }
-//console.log(process.env.SECRETE);
 
 const express = require("express");
 const app = express();
@@ -13,6 +12,7 @@ const ejsMate = require("ejs-mate");
 //const wrapAsync = require("./utils/wrapAsync.js");
 //const { asyncWrapProviders } = require("async_hooks");
 const ExpressError = require("./utils/ExpressEroor.js");
+
 // const { listingSchema , reviewSchema } = require("./schema.js");
 // const Review = require("./models/review.js");
 const cookieParser = require("cookie-parser");
@@ -28,7 +28,7 @@ const passport = require("passport");
 const userRouter = require("./routes/user.js");
 
 //const MONGO_URL="mongodb://127.0.0.1:27017/wanderlust";   
-const dbUrl = process.env.CLOUDINARY_ATLASDB_URL;
+const dbUrl = process.env.ATLASDB_URL;
 
 app.use(express.static(path.join(__dirname, "public")));//for css
 app.set("view engine", "ejs");  // ⚡ "view-engine" nahi, "view engine"
@@ -43,18 +43,16 @@ app.use(cookieParser("secretcode"));//signed cookie
 const store = MongoStore.create({
   mongoUrl: dbUrl,
   crypto:{
-    secret: process.env.CLOUDINARY_SECRET,
+    secret: process.env.SECRET,
   },
   touchAfter: 24 * 3600,
 });
 store.on("error", () => {
   console.log("eror in mongo session store", err);
 });
-
-
 const sessionOptions = {
     store,
-    secret: process.env.CLOUDINARY_SECRET,
+    secret: process.env.SECRET,
     resave: false ,
     saveUninitialized: true,
     cookie: {
@@ -63,8 +61,6 @@ const sessionOptions = {
         httpOnly: true,
     },
 };
-
-
 
 app.use(session(sessionOptions));
 app.use(flash());
@@ -104,17 +100,6 @@ app.use((req, res ,next ) =>{
 });
 
 
-// app.get("/demouser", async(req, res, next) => {
-//     let fakeUser = new User({
-//         email: "student@gmail.com",
-//         username: "delta-student",
-//     });
-// let registeredUser =await User.register(fakeUser, "pass");
-// res.send(registeredUser);
-// });
-
-
-
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
 app.use("/",userRouter);
@@ -131,11 +116,8 @@ app.use((err, req, res, next) => {
   res.status(statusCode).render("error.ejs", { err, message });
 });
 
-app.listen(8090, () => {
-    console.log(`app is listening on port 8090`);
+const port = process.env.PORT || 8090;
+app.listen(port, () => {
+  console.log(`App is listening on port ${port}`);
 });
-//EFeCq5dxnyO5scnC
 
-//mongodb+srv://dhiraj2062004p_db_user:EFeCq5dxnyO5scnC@cluster0.usgfc19.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
-
- 
