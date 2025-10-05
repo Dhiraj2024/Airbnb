@@ -86,10 +86,11 @@ app.use((req, res, next) => {
 
 // -------------------- ROUTES --------------------
 
-// Root route
-app.get("/", (req, res) => {
-    res.render("listings/index.ejs"); // ensure this file exists
-});
+//Index route--------
+app.get("/listings",wrapAsync( async(req, res) => {
+    const allListings = await Listing.find({});
+     res.render("listings/index.ejs",{allListings});
+}));
 
 // App routers
 app.use("/listings", listingsRouter);
