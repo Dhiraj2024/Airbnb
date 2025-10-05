@@ -15,7 +15,6 @@ const upload = multer({ storage });
 router.get("/new",isLoggedIn,listingController.renderNewform);
 
 
-
 router
 .route("/")
 //Index route--------

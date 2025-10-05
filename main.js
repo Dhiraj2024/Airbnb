@@ -1,7 +1,6 @@
 if (process.env.NODE_ENV != "production") {
 require("dotenv").config();
 }
-
 const express = require("express");
 const app = express();
 const mongoose = require('mongoose');
@@ -12,7 +11,6 @@ const ejsMate = require("ejs-mate");
 //const wrapAsync = require("./utils/wrapAsync.js");
 //const { asyncWrapProviders } = require("async_hooks");
 const ExpressError = require("./utils/ExpressEroor.js");
-
 // const { listingSchema , reviewSchema } = require("./schema.js");
 // const Review = require("./models/review.js");
 const cookieParser = require("cookie-parser");
@@ -82,10 +80,9 @@ async function main() {
  await  mongoose.connect(dbUrl);   
 }
 
-// app.get("/", (req, res) => {
-// //   console.dir(req.cookies);
-//      res.send("Root is  working");
-// });
+app.get("/", (req, res) => {
+ res.render("listings/index.ejs");
+});
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
@@ -102,7 +99,7 @@ app.use((req, res ,next ) =>{
 
 app.use("/listings",listingsRouter);
 app.use("/listings/:id/reviews",reviewsRouter);
-app.use("/",userRouter);
+app.use("/", userRouter);
 
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page not found"));
