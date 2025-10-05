@@ -82,10 +82,10 @@ async function main() {
  await  mongoose.connect(dbUrl);   
 }
 
-app.get("/", (req, res) => {
-//   console.dir(req.cookies);
-     res.send("Root is  working");
-});
+// app.get("/", (req, res) => {
+// //   console.dir(req.cookies);
+//      res.send("Root is  working");
+// });
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
