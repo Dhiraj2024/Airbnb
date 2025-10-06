@@ -95,14 +95,10 @@
       </div>
     </div>
 
-    
+
 <div class="row row-cols-lg-3 row-cols-md-3 row-cols-sm-1">
    <% for(let listing of allListings) { %>
-      
-    
     <a class="listing-for-img" href="/listings/<%= listing.id %>">
-      
-   
       <div class="card col listing-card" >  
         <img style="height: 20rem;" src=" <%= listing.image.url %> " class="card-img-top" alt="listing_img" />
 
