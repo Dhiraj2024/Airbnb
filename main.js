@@ -43,12 +43,23 @@ app.use(methodOverride("_method"));
 // Cookies
 app.use(cookieParser("secretcode"));
 
+
+app.use((req, res, next) => {
+    res.locals.currUser = req.user;
+    next();
+});
+
 // Session store
 const store = MongoStore.create({
     mongoUrl: dbUrl,
+    mongoOptions: {
+        retryWrites: true,
+        w: "majority"
+    },
     crypto: { secret: process.env.SECRET },
-    touchAfter: 24 * 3600,
+    touchAfter: 24 * 3600
 });
+
 store.on("error", (err) => {
     console.log("Error in mongo session store:", err);
 });

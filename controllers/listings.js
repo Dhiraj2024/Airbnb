@@ -1,12 +1,10 @@
 const Listing = require("../models/listing");
 
 
-
-
 //Index route--------
 module.exports.index =  async(req, res) => {
      const allListings = await Listing.find({});
-     res.render("listings/index.ejs",{allListings});
+     res.render("listings/index", {allListings});
 };
 
 //new route---
@@ -17,6 +15,7 @@ module.exports.renderNewform = (req, res) => {
  module.exports.showListing = async (req, res) => {
   let { id } = req.params;
   const listing = await Listing.findById(id)
+    .populate("owner")
     .populate({ 
      path: "reviews" ,  //data laa rahe hi
      populate : { 
