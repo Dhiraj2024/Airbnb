@@ -4,7 +4,7 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require("express");
 const app = express();
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
@@ -15,7 +15,7 @@ const flash = require("connect-flash");
 const passport = require("passport");
 const LocalStrategy = require("passport-local");
 
-const ExpressError = require("./utils/ExpressEroor.js"); // ✅ typo fix
+const ExpressError = require("./utils/ExpressEroor.js");
 const User = require("./models/user.js");
 
 // Routers
@@ -23,110 +23,125 @@ const listingsRouter = require("./routes/listing.js");
 const reviewsRouter = require("./routes/review.js");
 const userRouter = require("./routes/user.js");
 
-// DB connection URL
+// ======================
+// DATABASE CONNECTION
+// ======================
+
 const dbUrl = process.env.ATLASDB_URL;
 
-// -------------------- MIDDLEWARE SETUP --------------------
+async function main() {
+    await mongoose.connect(dbUrl, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
+}
 
-// Static files
-app.use(express.static(path.join(__dirname, "public")));
+main()
+    .then(() => console.log("MongoDB Connected Successfully"))
+    .catch((err) => console.log("DB ERROR:", err));
 
-// Views
+
+// ======================
+// VIEW & STATIC
+// ======================
+
+app.engine("ejs", ejsMate);
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
-app.engine('ejs', ejsMate);
+app.use(express.static(path.join(__dirname, "public")));
 
-// Parsing
 app.use(express.urlencoded({ extended: true }));
 app.use(methodOverride("_method"));
-
-// Cookies
-app.use(cookieParser("secretcode"));
+app.use(cookieParser("secret"));
 
 
-app.use((req, res, next) => {
-    res.locals.currUser = req.user;
-    next();
-});
+// ======================
+// SESSION STORE
+// ======================
 
-// Session store
 const store = MongoStore.create({
     mongoUrl: dbUrl,
-    mongoOptions: {
-        retryWrites: true,
-        w: "majority"
-    },
     crypto: { secret: process.env.SECRET },
-    touchAfter: 24 * 3600
+    touchAfter: 24 * 3600,
 });
 
-store.on("error", (err) => {
-    console.log("Error in mongo session store:", err);
+store.on("error", (e) => {
+    console.log("SESSION STORE ERROR", e);
 });
 
 const sessionOptions = {
     store,
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     cookie: {
-        expires: Date.now() + 7 * 24 * 60 * 1000,
-        maxAge: 7 * 24 * 60 * 60 * 1000,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
         httpOnly: true,
     },
 };
-app.use(session(sessionOptions));
 
-// Flash
+app.use(session(sessionOptions));
 app.use(flash());
 
-// Passport
+
+// ======================
+// PASSPORT AUTH
+// ======================
+
 app.use(passport.initialize());
 app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
+
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-// -------------------- GLOBAL VARIABLES FOR VIEWS --------------------
+
+// ======================
+// GLOBAL VARIABLES
+// ======================
+
 app.use((req, res, next) => {
+    res.locals.currUser = req.user;
     res.locals.successMsg = req.flash("success");
     res.locals.errorMsg = req.flash("error");
-    res.locals.currUser = req.user;
     next();
 });
 
-// -------------------- ROUTES --------------------
 
-// App routers
+// ======================
+// ROUTES
+// ======================
+
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
 app.use("/", userRouter);
 
-// -------------------- ERROR HANDLING --------------------
 
-// 404 handler
+// ======================
+// 404 HANDLER
+// ======================
+
 app.use((req, res, next) => {
-    next(new ExpressError(404, "Page not found"));
+    next(new ExpressError(404, "Page Not Found"));
 });
 
-// General error handler
+
+// ======================
+// ERROR HANDLER
+// ======================
+
 app.use((err, req, res, next) => {
-    const { statusCode = 500, message = "Something went wrong" } = err;
-    if (res.headersSent) return next(err);
+    const { statusCode = 500 } = err;
+    const message = err.message || "Something went wrong!";
     res.status(statusCode).render("error.ejs", { err, message });
 });
 
-// -------------------- DATABASE CONNECTION --------------------
-async function main() {
-    await mongoose.connect(dbUrl);
-}
 
-main()
-    .then(() => console.log("Connection successful"))
-    .catch(err => console.log(err));
+// ======================
+// SERVER
+// ======================
 
-// -------------------- SERVER START --------------------
 const port = process.env.PORT || 8090;
 app.listen(port, () => {
-    console.log(`App is listening on port ${port}`);
+    console.log("Server running on port", port);
 });
