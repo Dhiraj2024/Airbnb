@@ -30,11 +30,9 @@ const userRouter = require("./routes/user.js");
 const dbUrl = process.env.ATLASDB_URL;
 
 async function main() {
-    await mongoose.connect(dbUrl, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
+await mongoose.connect(dbUrl);
 }
+
 
 main()
     .then(() => console.log("MongoDB Connected Successfully"))
@@ -108,9 +106,18 @@ app.use((req, res, next) => {
 });
 
 
+
+
+
 // ======================
 // ROUTES
 // ======================
+
+// HOME ROUTE FIX
+app.get("/", (req, res) => {
+    res.redirect("/listings");
+});
+
 
 app.use("/listings", listingsRouter);
 app.use("/listings/:id/reviews", reviewsRouter);
