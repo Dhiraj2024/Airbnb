@@ -32,17 +32,38 @@ module.exports.renderNewform = (req, res) => {
 
 
 //Create Route
- module.exports.createListing   = async (req, res) => {
-  let url = req.file.path;
-  let filename = req.file.filename;
- // console.log(url , ".." , filename);
-   const newListing = new Listing(req.body.listing);
-   newListing.owner = req.user._id;
-   newListing.image = {url , filename};
-   await newListing.save();
-   req.flash("success","New Listing created!");
-   res.redirect("/listings");
+module.exports.createListing = async (req, res) => {
+  try {
+    const newListing = new Listing(req.body.listing);
+    newListing.owner = req.user._id;
+    // 🔐 Safe Image Handling
+    if (req.file) {
+      let url = req.file.path;
+      let filename = req.file.filename;
+      newListing.image = { url, filename };
+    }
+    await newListing.save();
+    req.flash("success", "New Listing created!");
+    res.redirect("/listings");
+  } catch (err) {
+    console.log(err);
+    req.flash("error", err.message);
+    res.redirect("/listings");
+  }
 };
+
+
+//  module.exports.createListing   = async (req, res) => {
+//   let url = req.file.path;
+//   let filename = req.file.filename;
+//  console.log(url , ".." , filename);
+//    const newListing = new Listing(req.body.listing);
+//    newListing.owner = req.user._id;
+//    newListing.image = {url , filename};
+//    await newListing.save();
+//    req.flash("success","New Listing created!");
+//    res.redirect("/listings");
+// };
 
 
 //Edit Route

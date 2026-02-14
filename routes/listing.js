@@ -21,6 +21,7 @@ router
     upload.single("listing[image]"),   // 1️⃣ pahle image upload
     validateListing,                   // 2️⃣ phir JOI validation
     wrapAsync(listingController.createListing)
+    
   );
 
 router
@@ -40,6 +41,7 @@ router
     upload.single("listing[image]"),   // 1️⃣ pahle upload
     validateListing,                   // 2️⃣ phir validate
     wrapAsync(listingController.updateListing)
+    
   );
 
 // EDIT ROUTE
