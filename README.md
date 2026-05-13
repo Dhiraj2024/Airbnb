@@ -5,13 +5,13 @@ A fully responsive **Hotel Room Booking Website** built using the **MERN Stack (
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home](./screenshot1.png)
+![Home](./Screenshot (526).png)
 
 ### 🛏️ Room Listing
-![Rooms](./screenshot2.png)
+![Rooms](./Screenshot (527).png)
 
 ### 📅 Booking Page
-![Booking](./screenshot3.png)
+![Booking](./Screenshot (528).png)
 
 ## 🔥 Features
 
