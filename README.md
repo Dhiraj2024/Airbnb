@@ -1,20 +1,13 @@
 # 🏨 Hotel Room Rental Website
-
 A fully responsive **Hotel Room Booking Website** built using the **MERN Stack (MongoDB, Express.js, React.js, Node.js)** with a modern UI.
-
 ## 📸 Screenshots
-
 ### 🏠 Home Page
-![Home](./Screenshot (526).png)
-
+(Screenshot (526).png)
 ### 🛏️ Room Listing
-![Rooms](./Screenshot (527).png)
-
+(Screenshot (527).png)
 ### 📅 Booking Page
-![Booking](./Screenshot (528).png)
-
+(Screenshot (528).png)
 ## 🔥 Features
-
 - 🏨 Browse available hotel rooms
 - 🔍 Search & filter rooms
 - 📅 Room booking system
@@ -22,11 +15,7 @@ A fully responsive **Hotel Room Booking Website** built using the **MERN Stack (
 - 🧑‍💼 Admin panel to manage rooms
 - 📱 Fully responsive design
 - ⚡ Fast & smooth performance
-
----
-
 ## 🛠️ Tech Stack
-
 ### Frontend:
 - React.js
 - Tailwind CSS
@@ -73,7 +62,6 @@ Start Frontend:
 cd client
 npm start
 🌐 Environment Variables
-
 Create a .env file inside server/ and add:
 
 MONGO_URI=your_mongodb_connection
