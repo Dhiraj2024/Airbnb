@@ -1,11 +1,11 @@
 # 🏨 Hotel Room Rental Website
 A fully responsive **Hotel Room Booking Website** built using the **MERN Stack (MongoDB, Express.js, React.js, Node.js)** with a modern UI.
 ### 🏠 Home Page
-![Home](Screenshot (526).png)
+![Home](Screenshot%20(526).png)
 ### 🛏️ Room Listing
-![Rooms](Screenshot (527).png)
+![Rooms](Screenshot%20(527).png)
 ### 📅 Booking Page
-![Booking](Screenshot (528).png)
+![Booking](Screenshot%20(528).png)
 ## 🔥 Features
 - 🏨 Browse available hotel rooms
 - 🔍 Search & filter rooms
